@@ -18,8 +18,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 	return $request->user();
 });
 
-Route::group(['middleware' => 'api',], function ($router) {
-	Route::post('/login', [App\Http\Controllers\AuthController::class, 'login']);
+Route::group([
+	'middleware' => 'api',
+], function ($router) {
+	Route::post('/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 	Route::post('/register', [App\Http\Controllers\AuthController::class, 'register']);
 	Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
 	Route::post('/refresh', [App\Http\Controllers\AuthController::class, 'refresh']);
@@ -29,11 +31,23 @@ Route::group(['middleware' => 'api',], function ($router) {
 
 
 //Faculty
-Route::get('data-name-faculty', [App\Http\Controllers\FacultiesController::class, 'index']);
-Route::get('data-faculty', [App\Http\Controllers\FacultiesController::class, 'getData']);
+Route::get('data-faculty', [App\Http\Controllers\FacultiesController::class, 'index']);
+Route::post('create-faculty', [App\Http\Controllers\FacultiesController::class, 'store']);
+Route::put('update-faculty', [App\Http\Controllers\FacultiesController::class, 'update']);
+Route::get('data-faculty/{id}', [App\Http\Controllers\FacultiesController::class, 'show']);
+Route::post('delete-faculty', [App\Http\Controllers\FacultiesController::class, 'destroy']);
+Route::post('delete-mutiple', [App\Http\Controllers\FacultiesController::class, 'deleteMutiple']);
+
 //Major
 Route::get('data-major', [App\Http\Controllers\MajorController::class, 'index']);
-Route::get('data-major-by-faculty/{id}', [App\Http\Controllers\MajorController::class, 'show']);
+Route::get('data-major-trash', [App\Http\Controllers\MajorController::class, 'listMajorWithTrashed']);
+Route::get('data-major-by-faculty/{id}', [App\Http\Controllers\MajorController::class, 'showList']);
+Route::get('data-major/{id}', [App\Http\Controllers\MajorController::class, 'show']);
+Route::post('create-major', [App\Http\Controllers\MajorController::class, 'store']);
+Route::put('update-major', [App\Http\Controllers\MajorController::class, 'update']);
+Route::post('delete-major', [App\Http\Controllers\MajorController::class, 'destroy']);
+Route::post('delete-mutiple', [App\Http\Controllers\MajorController::class, 'deleteMutiple']);
+
 //Student
 Route::get('data-student', [App\Http\Controllers\StudentsController::class, 'index']);
 Route::get('data-student/{id}', [App\Http\Controllers\StudentsController::class, 'show']);

@@ -7,6 +7,7 @@ use App\Http\Requests\Student\UpdateStudentRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use App\Repositories\StudentRepository;
+use App\Services\StudentService;
 
 class StudentsController extends Controller
 {
@@ -33,6 +34,7 @@ class StudentsController extends Controller
 			'password',
 			'address',
 			'phone',
+			'faculty_id',
 			'major_id',
 			'gender',
 			'birthday',
@@ -54,6 +56,7 @@ class StudentsController extends Controller
 			'name',
 			'address',
 			'phone',
+			'faculty_id',
 			'major_id',
 			'gender',
 			'birthday',
@@ -73,23 +76,9 @@ class StudentsController extends Controller
 	public function index()
 	{
 		$student_list = $this->studentRepository->getAll();
-		// $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
-		// 	return strtoupper($name);
-		// })->reject(function ($name) {
-		// 	return empty($name);
-		// });
-		// $check= 0;
-		// if ($collection instanceof \Illuminate\Support\Collection) {
-		// 	$check = 1;
-		// }; 
-
-		// if ($collection instanceof \Illuminate\Database\Eloquent\Model) {
-		// 	$check = 2;
-		// }; 
 
 		return response()->json([
 			'data' => $student_list,
-			// 'aaaa'	=> $check,
 		],200);
 	}
 

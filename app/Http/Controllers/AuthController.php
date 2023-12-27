@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Student;
 use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -62,7 +64,7 @@ class AuthController extends Controller
 			'status' => 'success',
 			'message' => 'User created successfully',
 			'user' => $user,
-			'authorisation' => [
+			'authorization' => [
 				'token' => $token,
 				'type' => 'bearer',
 			]
@@ -88,9 +90,17 @@ class AuthController extends Controller
 	 *
 	 * @return \Illuminate\Http\JsonResponse
 	 */
-	public function refresh()
+	public function refresh(Request $request)
 	{
-		return $this->createNewToken(auth('api')->refresh());
+		$refresh_token =$request->bearerToken();
+		$check = Token::where('refresh_token', $refresh_token)
+						->whereDate('refresh_token_expried', '>=', Carbon::now()->format('Y-m-d H:i:s'))
+						->get();
+		if ($check) {
+			return $this->createNewToken(auth('api')->refresh());
+		}
+		Auth::guard('api')->logout();
+		return "Logout successs";
 	}
 
 	/**
@@ -113,18 +123,18 @@ class AuthController extends Controller
 	protected function createNewToken($token)
 	{
 		$check = Token::where('student_id', auth('api')->id())->first();
-		$refresh_token = Str::random(40);
+		$refresh_token = Str::random(120);
 		if(! $check) {
 			Token::create([
 				'token'					=> $token,
-				'token_expried'			=> Carbon::now()->addMinute(1)->format('Y-m-d H:i:s'),
+				'token_expried'			=> Carbon::now()->addMinute(3)->format('Y-m-d H:i:s'),
 				'refresh_token'			=> $refresh_token,
 				'refresh_token_expried'	=> Carbon::now()->addMonth(1)->format('Y-m-d H:i:s'),
 				'student_id' 			=> auth('api')->id(),
 			]);
 		} else {
 			$check->token 					= $token;
-			$check->token_expried 			= Carbon::now()->addMinute(1)->format('Y-m-d H:i:s');
+			$check->token_expried 			= Carbon::now()->addMinute(3)->format('Y-m-d H:i:s');
 			$check->refresh_token 			= $refresh_token;
 			$check->refresh_token_expried	= Carbon::now()->addMonth(1)->format('Y-m-d H:i:s');
 			$check->save();
@@ -132,7 +142,7 @@ class AuthController extends Controller
 		
 		return response()->json([
 			'access_token' 		=> $token,
-			'token_expires_in'	=> Carbon::now()->addMinute(1)->format('Y-m-d H:i:s'),
+			'token_expires_in'	=> Carbon::now()->addMinute(3)->format('Y-m-d H:i:s'),
 			'refresh_token' 	=> $refresh_token,
 			'user' 				=> auth('api')->user(),
 			'status' 			=> true,

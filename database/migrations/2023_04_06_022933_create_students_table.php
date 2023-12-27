@@ -18,6 +18,7 @@ return new class extends Migration
 			$table->integer('gender');
 			$table->string('address');
 			$table->string('phone');
+			$table->integer('faculty_id');
 			$table->integer('major_id');
 			$table->softDeletes();
 			$table->timestamps();

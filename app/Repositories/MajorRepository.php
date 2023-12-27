@@ -27,4 +27,8 @@ class MajorRepository extends EloquentRepository
 	{
 		return $this->getModel()::where('faculty_id', $faculty_id)->get();
 	}
+
+	public function getMajorWithTrash() {
+		return $this->getModel()::withTrashed()->get();
+	}
 }
