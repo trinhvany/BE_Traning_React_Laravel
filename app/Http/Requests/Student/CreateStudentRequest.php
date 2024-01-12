@@ -14,14 +14,14 @@ class CreateStudentRequest extends FormRequest
 	{
 		return [
 			'student_id'	=>  'unique:students,student_id',
-			'name'			=>  'required|min:1|regex:/^([a-zA-Z ])+$/',
-			'email'			=>  'required|email|unique:students,email',
+			'name'			=>  'required|min:1|regex:/^([a-zA-Z ])+$/|max:191',
+			'email'			=>  'required|email|unique:students,email|max:191',
 			'birthday'		=>  'date|before:today',
-			'gender'		=>  'required|numeric',
-			'password'		=>  'required|between:8,16',
-			'address'		=>  'required|min:4',
-			'phone'			=>  'required|numeric|digits:10',
-			'major_id'		=>  'required|numeric|min:1'
+			'gender'		=>  'required|numeric|between:0,2',
+			'password'		=>  'required|between:8,50',
+			'address'		=>  'required|min:4|max:191',
+			'phone'			=>  'required|numeric|digits:10|regex:/^0[0-9]{9}$/',
+			'major_id'		=>  'required|numeric|min:1',
 		];
 	}
 	public function messages()
@@ -32,13 +32,14 @@ class CreateStudentRequest extends FormRequest
 				'alpha'			=> ':attribute must be a string of characters from the alphabet',
 				'major_id.min'	=> ':attribute invalid',
 				'min'			=> ':attribute too short',
-				'between'		=> ':attribute between 8 and 16 character',
+				'between'		=> ':attribute between 8 and 50 character',
 				'unique'		=> ':attribute already exist',
 				'digits'		=> ':attribute must be 10 number charater ',
 				'date'			=> ':attribute must be date',
 				'email'			=> ':attribute must be email',
 				'numeric'		=> ':attribute must be number',
-				'before'		=> ':attribute is bigger than current date'
+				'before'		=> ':attribute is bigger than current date',
+				'regex'			=> ':attribute must be phone number 0xxxxxxxxx',
 			];
 		}
 	}

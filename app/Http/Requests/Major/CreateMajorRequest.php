@@ -14,7 +14,7 @@ class CreateMajorRequest extends FormRequest
     public function rules()
 	{
 		return [
-			'name'			=>  'required|min:1|regex:/^([a-zA-Z ])+$/',
+			'name'			=>  'required|min:1|regex:/^([a-zA-Z ])+$/|max:191',
 			'faculty_id'		=>  'required|numeric|min:1'
 		];
 	}
@@ -27,6 +27,7 @@ class CreateMajorRequest extends FormRequest
 				'faculty_id.min'	=> ':attribute invalid',
 				'min'			=> ':attribute too short',
 				'numeric'		=> ':attribute must be number',
+				'max'            => ':attribute too long',
 			];
 		}
 	}

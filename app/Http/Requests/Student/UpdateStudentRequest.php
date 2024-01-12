@@ -17,9 +17,9 @@ class UpdateStudentRequest extends FormRequest
 			'name'			=>  'required|min:1|regex:/^([a-zA-Z ])+$/',
 			'email'			=>  'required|email|unique:students,email,'.$this->id,
 			'birthday'		=>  'date',
-			'gender'		=>  'required|numeric|between:0,1',
+			'gender'		=>  'required|numeric|between:0,2',
 			'address'		=>  'required|min:4',
-			'phone'			=>  'required|numeric|digits:10',
+			'phone'			=>  'required|numeric|digits:10|regex:/^0[0-9]{9}$/',
 			'major_id'		=>  'required|numeric|min:1'
 		];
 	}
@@ -35,7 +35,8 @@ class UpdateStudentRequest extends FormRequest
 				'digits'		=> ':attribute must be 10 number charater ',
 				'date'			=> ':attribute must be date',
 				'email'			=> ':attribute must be email',
-				'numeric'		=> ':attribute must be number'
+				'numeric'		=> ':attribute must be number',
+				'regex'			=> ':attribute must be phone number 0xxxxxxxxx',
 			];
 		}
 	}

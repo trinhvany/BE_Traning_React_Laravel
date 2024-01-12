@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Student\CreateStudentRequest;
 use App\Http\Requests\Student\UpdateStudentRequest;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use App\Repositories\StudentRepository;
-use App\Services\StudentService;
 
 class StudentsController extends Controller
 {
@@ -39,7 +37,7 @@ class StudentsController extends Controller
 			'gender',
 			'birthday',
 		);
-		$data['student_id'] = 'SV'. mt_rand(100, 100000);
+		$data['student_id'] = 'SV'. mt_rand(100000, 999999);
 		$data['password'] = bcrypt($request->password);
 		$this->studentRepository->create($data);
 		
